@@ -4,12 +4,12 @@ import random
 
 app = Flask(__name__)
 
-# Path to the images directory
+# Path to images directory
 images_dir = 'static/images/'
-# List of images (10 images)
+# List of images
 image_files = [f for f in os.listdir(images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
 
-# Initialize votes for images
+# Votes dictionary
 votes = {img: 0 for img in image_files}
 
 @app.route('/')
