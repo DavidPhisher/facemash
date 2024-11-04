@@ -15,7 +15,7 @@ votes = {img: 0 for img in image_files}
 def index():
     # Select two random images
     selected_images = random.sample(image_files, 2)
-    return render_template('index.html', images=selected_images)
+    return render_template('index.html', images=selected_images, votes=votes)  # Pass votes to the template
 
 @app.route('/vote', methods=['POST'])
 def vote():
