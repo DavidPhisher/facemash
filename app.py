@@ -6,8 +6,9 @@ app = Flask(__name__)
 
 # Path to the images directory
 images_dir = 'static/images/'
-# List of images
+# List of images (10 images)
 image_files = [f for f in os.listdir(images_dir) if f.endswith(('.jpg', '.jpeg', '.png'))]
+
 # Initialize votes for images
 votes = {img: 0 for img in image_files}
 
@@ -15,7 +16,7 @@ votes = {img: 0 for img in image_files}
 def index():
     # Select two random images
     selected_images = random.sample(image_files, 2)
-    return render_template('index.html', images=selected_images, votes=votes)  # Pass votes to the template
+    return render_template('index.html', images=selected_images, votes=votes)
 
 @app.route('/vote', methods=['POST'])
 def vote():
