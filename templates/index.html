@@ -22,7 +22,7 @@
         {% for image in images %}
             <div class="image">
                 <img src="{{ url_for('static', filename='images/' + image) }}" alt="Image">
-                <p>Vote(s): <span class="vote-count">{{ votes[image] }}</span></p>
+                <p>Vote(s): <span class="vote-count" data-image="{{ image }}">{{ votes[image] }}</span></p>
                 <button class="vote-btn" data-image="{{ image }}">Vote</button>
             </div>
         {% endfor %}
