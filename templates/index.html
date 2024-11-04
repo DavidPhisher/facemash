@@ -8,11 +8,20 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-color: #f4f4f4;
+            padding: 20px;
         }
         img {
-            width: 300px; /* Adjust image size */
+            width: 300px; /* Adjust size as needed */
             height: auto;
             margin: 20px;
+            cursor: pointer; /* Change cursor to pointer for clickable images */
+            border: 2px solid #ccc; /* Optional: border to images */
+            border-radius: 10px; /* Optional: rounded corners */
+            transition: transform 0.2s; /* Optional: smooth zoom effect */
+        }
+        img:hover {
+            transform: scale(1.05); /* Optional: slightly zoom image on hover */
         }
     </style>
 </head>
@@ -21,18 +30,16 @@
     <div id="images">
         {% for image in images %}
             <div class="image">
-                <img src="{{ url_for('static', filename='images/' + image) }}" alt="Image">
-                <p>Vote(s): <span class="vote-count" data-image="{{ image }}">{{ votes[image] }}</span></p>
-                <button class="vote-btn" data-image="{{ image }}">Vote</button>
+                <img src="{{ url_for('static', filename='images/' + image) }}" alt="Image" data-image="{{ image }}">
+                <p>Vote(s): <span class="vote-count">{{ votes[image] }}</span></p>
             </div>
         {% endfor %}
     </div>
 
     <script>
-        const voteButtons = document.querySelectorAll('.vote-btn');
-
-        voteButtons.forEach(button => {
-            button.addEventListener('click', function() {
+        // Add click event listener to images
+        document.querySelectorAll('img').forEach(image => {
+            image.addEventListener('click', function() {
                 const imageUrl = this.getAttribute('data-image');
                 fetch('/vote', {
                     method: 'POST',
@@ -43,8 +50,13 @@
                 })
                 .then(response => response.json())
                 .then(data => {
-                    // Update vote counts
-                    document.querySelector('.vote-count[data-image="' + imageUrl + '"]').textContent = data.votes[imageUrl];
+                    // Update vote count
+                    document.querySelector('.vote-count').textContent = data.votes[imageUrl];
+
+                    // Refresh the page to show new images after voting
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1000); // Delay to show vote count update before refresh
                 });
             });
         });
