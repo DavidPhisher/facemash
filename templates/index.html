@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HotOrNot?</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Unofficial HotOrNot.com</h1>
+    </header>
+    <div class="container">
+        <h2>Who's Better?</h2>
+        <div class="images-container">
+            {% for image in images %}
+            <div class="image" data-id="{{ image[0] }}" data-score="{{ image[2] }}">
+                <img src="{{ url_for('static', filename=image[1].split('static/')[1]) }}" alt="Image">
+                <p>Vote(s): <span class="vote">{{ image[2] }}</span></p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="footer-text">
+        <p>Copyright @2024</p>
+        <p>This is strictly for fun and doesn't mean any disrespect.</p>
+    </div>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
