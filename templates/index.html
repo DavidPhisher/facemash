@@ -3,28 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HotOrNot?</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Who's Better?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        img {
+            width: 300px; /* Adjust image size */
+            height: auto;
+            margin: 20px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Unofficial HotOrNot.com</h1>
-    </header>
-    <div class="container">
-        <h2>Who's Better?</h2>
-        <div class="images-container">
-            {% for image in images %}
-            <div class="image" data-id="{{ image[0] }}" data-score="{{ image[2] }}">
-                <img src="{{ url_for('static', filename=image[1].split('static/')[1]) }}" alt="Image">
-                <p>Vote(s): <span class="vote">{{ image[2] }}</span></p>
+    <h1>Who's Better?</h1>
+    <div id="images">
+        {% for image in images %}
+            <div class="image">
+                <img src="{{ image.url }}" alt="Image">
+                <p>Vote(s): <span class="vote-count">{{ image.votes }}</span></p>
+                <button class="vote-btn" data-image="{{ image.url }}">Vote</button>
             </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
-    <div class="footer-text">
-        <p>Copyright @2024</p>
-        <p>This is strictly for fun and doesn't mean any disrespect.</p>
-    </div>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+    <script>
+        const voteButtons = document.querySelectorAll('.vote-btn');
+
+        voteButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const imageUrl = this.getAttribute('data-image');
+                fetch('/vote', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ image: imageUrl }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Update vote counts
+                    data.images.forEach((img, index) => {
+                        document.querySelectorAll('.vote-count')[index].textContent = img.votes;
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
